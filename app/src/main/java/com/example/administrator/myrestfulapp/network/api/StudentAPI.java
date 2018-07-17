@@ -40,6 +40,7 @@ public interface StudentAPI {
     @POST("students/")
     Observable<ResponseBody> createStudent(@Field("name") String name);
 
+    //通过id 删除一个student
     @DELETE("students/{id}/")
     Observable<ResponseBody> deleteStudentById(@Path("id") int id);
 
