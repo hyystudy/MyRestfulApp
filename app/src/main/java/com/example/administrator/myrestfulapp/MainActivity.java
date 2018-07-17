@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.get_all_student).setOnClickListener(this);
         findViewById(R.id.get_student_by_id).setOnClickListener(this);
         findViewById(R.id.update_student).setOnClickListener(this);
+        findViewById(R.id.create_student).setOnClickListener(this);
+        findViewById(R.id.delete_student).setOnClickListener(this);
     }
 
     @Override
@@ -47,8 +49,50 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.update_student:
                 updateStudent();
                 break;
+            case R.id.create_student:
+                createStudent();
+                break;
+            case R.id.delete_student:
+                deleteStudent();
+                break;
 
         }
+    }
+
+    private void deleteStudent() {
+        Network.getStudentAPI()
+                .deleteStudentById(5)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<ResponseBody>() {
+                    @Override
+                    public void accept(ResponseBody responseBody) throws Exception {
+                        Toast.makeText(MainActivity.this, responseBody.string(), Toast.LENGTH_SHORT).show();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Toast.makeText(MainActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void createStudent() {
+        Network.getStudentAPI()
+                .createStudent("贺三伟")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<ResponseBody>() {
+                    @Override
+                    public void accept(ResponseBody responseBody) throws Exception {
+                        Toast.makeText(MainActivity.this, responseBody.string(), Toast.LENGTH_SHORT).show();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+
+                    }
+                });
     }
 
     private void updateStudent() {

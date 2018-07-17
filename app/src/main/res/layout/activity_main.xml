@@ -35,5 +35,23 @@
         app:layout_constraintLeft_toRightOf="@+id/get_student_by_id"
         android:text="更新student"/>
 
+    <Button
+        android:id="@+id/create_student"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/get_all_student"
+        android:layout_marginTop="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text="创建student"/>
+
+    <Button
+        android:id="@+id/delete_student"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/get_all_student"
+        app:layout_constraintLeft_toRightOf="@+id/create_student"
+        android:text="删除student"/>
+
 
 </android.support.constraint.ConstraintLayout>
