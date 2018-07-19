@@ -23,10 +23,10 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setCustomDensity(this, getApplication());
+        setCustomDensityByDefaultWidth(this, getApplication(), 360);
     }
 
-    public static void setCustomDensity(@NonNull Activity activity, @NonNull final Application application) {
+    public static void setCustomDensityByDefaultWidth(@NonNull Activity activity, @NonNull final Application application, int defaultWidth) {
         final DisplayMetrics appDisplayMetrics = application.getResources().getDisplayMetrics();
         Log.d("BaseActivity", "system density--->" + appDisplayMetrics.density);
         Log.d("BaseActivity", "system scale density--->" + appDisplayMetrics.scaledDensity);
@@ -49,7 +49,7 @@ public class BaseActivity extends AppCompatActivity {
                 }
             });
         }
-        final float targetDensity  = appDisplayMetrics.widthPixels * 1.f/ 360;
+        final float targetDensity  = appDisplayMetrics.widthPixels * 1.f/ defaultWidth;
         final float targetScaleDensity = targetDensity * (sNoncompatScaleDensity / sNoncompatDensity);
         final int targetDensityDpi = (int) (160 * targetDensity);
 
