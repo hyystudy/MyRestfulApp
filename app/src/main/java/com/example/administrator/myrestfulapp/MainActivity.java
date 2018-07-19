@@ -13,14 +13,39 @@ import com.example.administrator.myrestfulapp.network.Network;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.Nullable;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Interceptor;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import okhttp3.ResponseBody;
+import okio.Buffer;
+import okio.BufferedSource;
+import okio.ByteString;
+import okio.Options;
+import okio.Sink;
+import okio.Timeout;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -35,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.update_student).setOnClickListener(this);
         findViewById(R.id.create_student).setOnClickListener(this);
         findViewById(R.id.delete_student).setOnClickListener(this);
+        findViewById(R.id.btn_rxjava).setOnClickListener(this);
+        findViewById(R.id.btn_okhttp).setOnClickListener(this);
     }
 
     @Override
@@ -55,8 +82,81 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.delete_student:
                 deleteStudent();
                 break;
+            case R.id.btn_rxjava:
+                showRxJavaDemo();
+                break;
+            case R.id.btn_okhttp:
+                requestByOkhttp();
+                break;
 
         }
+    }
+
+    private void requestByOkhttp() {
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+//                .addInterceptor(new Interceptor() {
+//                    @Override
+//                    public Response intercept(Chain chain) throws IOException {
+//                        //Toast.makeText(MainActivity.this, "拦截器执行了", Toast.LENGTH_SHORT).show();
+//                        Log.d("MainActivity", "intercept: ");
+//                        Request request = chain.request();
+//
+//                        return chain.proceed(request);
+//                    }
+//                })
+                .connectTimeout(5, TimeUnit.SECONDS)
+                .build();
+        Request request = new Request.Builder()
+                .get()
+                .url("http://www.hyyfamily.com/data/students/")
+                .build();
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Log.d("MainActivity", response.body().string());
+                //Toast.makeText(MainActivity.this, response.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void showRxJavaDemo() {
+        //通过create 创建observable 一般不用
+//        Observable.create(new ObservableOnSubscribe<String>() {
+//            @Override
+//            public void subscribe(ObservableEmitter<String> e) throws Exception {
+//                    //模拟耗时操作
+//                    Thread.sleep(1000);
+//                    e.onNext("next1");
+//                    Thread.sleep(1000);
+//                    e.onNext("next2");
+//                    Thread.sleep(1000);
+//                    e.onComplete();
+//            }
+//        }).subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Consumer<String>() {
+//            @Override
+//            public void accept(String s) throws Exception {
+//                Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
+//            }
+//        }, new Consumer<Throwable>() {
+//            @Override
+//            public void accept(Throwable throwable) throws Exception {
+//
+//            }
+//        }, new Action() {
+//            @Override
+//            public void run() throws Exception {
+//                Toast.makeText(MainActivity.this, "Complete", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
+        
     }
 
     private void deleteStudent() {
@@ -81,11 +181,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Network.getStudentAPI()
                 .createStudent("贺三伟")
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<ResponseBody>() {
+                .map(new Function<ResponseBody, String>() {
                     @Override
-                    public void accept(ResponseBody responseBody) throws Exception {
-                        Toast.makeText(MainActivity.this, responseBody.string(), Toast.LENGTH_SHORT).show();
+                    public String apply(ResponseBody responseBody) throws Exception {
+                        return responseBody.string();
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<String>() {
+                    @Override
+                    public void accept(String s) throws Exception {
+                        Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
                     }
                 }, new Consumer<Throwable>() {
                     @Override
