@@ -48,7 +48,7 @@ import okio.Options;
 import okio.Sink;
 import okio.Timeout;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private List<Student> studentList = new ArrayList<>();
     @Override
