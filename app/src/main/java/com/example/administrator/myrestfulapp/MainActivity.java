@@ -1,5 +1,6 @@
 package com.example.administrator.myrestfulapp;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.delete_student).setOnClickListener(this);
         findViewById(R.id.btn_rxjava).setOnClickListener(this);
         findViewById(R.id.btn_okhttp).setOnClickListener(this);
+        findViewById(R.id.btn_viewpager).setOnClickListener(this);
     }
 
     @Override
@@ -88,8 +90,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_okhttp:
                 requestByOkhttp();
                 break;
+            case R.id.btn_viewpager:
+                openViewPagerActivity();
+                break;
 
         }
+    }
+
+    private void openViewPagerActivity() {
+        startActivity(new Intent(MainActivity.this, ViewPagerActivity.class));
     }
 
     private void requestByOkhttp() {
