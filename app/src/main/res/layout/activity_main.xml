@@ -76,7 +76,7 @@
         android:layout_height="wrap_content"
         android:text="打开viewpagerActivity"
         app:layout_constraintTop_toBottomOf="@+id/create_student"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/btn_okhttp"
         android:layout_marginTop="16dp"/>
 
 
