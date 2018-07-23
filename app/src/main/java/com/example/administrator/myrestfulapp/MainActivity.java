@@ -1,6 +1,8 @@
 package com.example.administrator.myrestfulapp;
 
+import android.os.PersistableBundle;
 import android.support.v4.os.AsyncTaskCompat;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -49,7 +51,7 @@ import okio.Sink;
 import okio.Timeout;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
-
+    private String TAG = "MainActivity";
     private List<Student> studentList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         findViewById(R.id.delete_student).setOnClickListener(this);
         findViewById(R.id.btn_rxjava).setOnClickListener(this);
         findViewById(R.id.btn_okhttp).setOnClickListener(this);
+        findViewById(R.id.btn_viewpager).setOnClickListener(this);
+        Log.d(TAG, "onCreate: ");
     }
 
     @Override
@@ -88,8 +92,77 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.btn_okhttp:
                 requestByOkhttp();
                 break;
+            case R.id.btn_viewpager:
+                openViewPagerActivity();
+                break;
 
         }
+    }
+
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        Log.d(TAG, "onAttachedToWindow: ");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart: ");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: ");
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.d(TAG, "onSaveInstanceState: ");
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        Log.d(TAG, "onRestoreInstanceState: ");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d(TAG, "onRestart: ");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause: ");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop: ");
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
+    }
+
+    @Override
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        Log.d(TAG, "onDetachedFromWindow: ");
+    }
+
+    private void openViewPagerActivity() {
+        startActivity(new Intent(MainActivity.this, ViewPagerActivity.class));
     }
 
     private void requestByOkhttp() {
